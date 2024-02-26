@@ -168,12 +168,26 @@ public class Main {
 
     /**
      * Печатает результат программы, выражая базисные переменные.
+     * Дополнительно проверят совместность системы.
      *
      * @param matrix полученная в ходе программы матрица
      * @param bases  массив базисных переменных
      */
     public static void printResult(Fraction[][] matrix, ArrayList<Integer> bases) {
         System.out.println("\nОтвет: ");
+        for (Fraction[] row : matrix) {
+            boolean isNonZeroRow = true;
+            for (int i = 0; i < row.length - 1; i++) {
+                if (row[i].getNumerator() != 0) {
+                    isNonZeroRow = false;
+                    break;
+                }
+            }
+            if (isNonZeroRow && row[row.length - 1].getNumerator() != 0) {
+                System.out.println("Система уравнений несовместна.");
+                return;
+            }
+        }
         ArrayList<Integer> basesColumns = new ArrayList<>();
         for (int b : bases) {
             basesColumns.add(b - 1);

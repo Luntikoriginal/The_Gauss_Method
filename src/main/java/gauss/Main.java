@@ -33,17 +33,7 @@ public class Main {
             }
             Fraction[][] matrix = createMatrix(coefficients, columns);
 
-            String[] basesStr = data.get(rows + 1).split("\\s*,\\s*");
-            ArrayList<Integer> bases = new ArrayList<>();
-            for (String s : basesStr) {
-                bases.add(Integer.parseInt(s));
-                if (bases.get(bases.size() - 1) > columns) {
-                    throw new BasesFormatException("Номер базисной переменной больше кол-ва столбцов!");
-                }
-            }
-            if (bases.size() != rows) {
-                throw new EmptyFileException("Кол-во базисных переменных не равно кол-ву строк матрицы!");
-            }
+            ArrayList<Integer> bases = getBases(data, rows, columns);
 
             System.out.println("\nПреобразование");
             gauss(matrix, bases);
@@ -59,6 +49,21 @@ public class Main {
         } catch (EmptyFileException e) {
             System.err.println("Недостаточно данных: " + e.getMessage());
         }
+    }
+
+    private static ArrayList<Integer> getBases(List<String> data, int rows, int columns) throws BasesFormatException, EmptyFileException {
+        String[] basesStr = data.get(rows + 1).split("\\s*,\\s*");
+        ArrayList<Integer> bases = new ArrayList<>();
+        for (String s : basesStr) {
+            bases.add(Integer.parseInt(s));
+            if (bases.get(bases.size() - 1) > columns) {
+                throw new BasesFormatException("Номер базисной переменной больше кол-ва столбцов!");
+            }
+        }
+        if (bases.size() != rows) {
+            throw new EmptyFileException("Кол-во базисных переменных не равно кол-ву строк матрицы!");
+        }
+        return bases;
     }
 
     /**
